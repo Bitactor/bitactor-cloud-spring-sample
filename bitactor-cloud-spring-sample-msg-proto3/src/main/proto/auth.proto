@@ -1,0 +1,31 @@
+syntax = "proto3";
+option java_package = "com.bitactor.cloud.spring.sample.msg.proto.auth";
+option java_multiple_files = true;
+// 平台枚举
+enum PlatformEnum {
+    UNKNOWN = 0;
+    TEST = 1;
+    BITACTOR = 2;
+}
+// 平台枚举
+enum AuthType {
+    AUTH_TOKEN = 0; // token 授权
+    AUTH_PASSWORD = 1; // 账号密码 授权
+}
+// 平台枚举
+enum ParamKeyType {
+    USERID = 0; // userId
+    TOKEN = 1; // 验证收取token
+    ACCOUNT = 2; // 账号
+    PASSWORD = 3; // 密码
+}
+// 登录授权请求
+message LoginAuthReq {
+    PlatformEnum platform = 1; // 平台
+    AuthType authType = 2; // 授权类型
+    map<int32, string> params = 3; // 参数
+}
+// 登录授权响应
+message LoginAuthResp {
+    bool needCreateRole = 2; // 是否创建角色
+}

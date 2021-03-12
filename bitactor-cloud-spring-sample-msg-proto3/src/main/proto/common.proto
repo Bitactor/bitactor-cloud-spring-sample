@@ -1,0 +1,43 @@
+syntax = "proto3";
+import "google/protobuf/any.proto";
+option java_package = "com.bitactor.cloud.spring.sample.msg.proto.common";
+option java_multiple_files = true;
+// 错误码枚举
+enum CodeEnum {
+    UNKNOWN_ERROR = 0; //未知错误
+    SYSTEM_ERROR = 1; //系统级别错误
+    NEED_AUTH = 2; //需要授权，未授权
+    NONSUPPORT = 3; //不支持
+    ILLEGALITY = 4; //非法
+
+    SUCCESS = 200; //成功
+    FAILED = 201; //失败
+
+    // 授权-----相关 1001~1999
+    NONSUPPORT_PLATFORM = 1000; //不支持该平台
+    // 玩家-----相关
+    REPEAT_NICKNAME = 2000; //昵称重复
+
+
+}
+// 错误码枚举
+enum DisconnectEnum {
+    OTHER_LOGIN = 0; //其他设备登录
+    GM_KICK_OUT = 1; //GM踢人下线
+    SERVER_MAINTAIN = 2; //服务器维护
+}
+
+// 响应基础信息，
+message RoleProto {
+    int64 uid = 1; // 用户id
+    string nickname = 2; // 用户昵称
+    map<string, string> params = 3; // 用户数据
+}
+
+// 通用响应，
+message CommonResp {
+    CodeEnum code = 1; // 响应误码
+    string msg = 2; // 响应信息
+    google.protobuf.Any data = 3;
+}
+

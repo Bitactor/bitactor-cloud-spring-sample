@@ -1,0 +1,27 @@
+syntax = "proto3";
+option java_package = "com.bitactor.cloud.spring.sample.msg.proto.player";
+option java_multiple_files = true;
+import public "common.proto";
+
+// 创建角色
+message PlayerCreateRoleReq {
+    string nickname = 2; // 创建角色
+}
+// 进入世界，
+message PlayerEnterWorldReq {
+
+}
+// 进入世界，
+message PlayerEnterWorldResp {
+    RoleProto role = 1;
+}
+
+// 获取角色信息，测试，
+message PlayerGetRoleReq {
+
+}
+// 获取角色信息，测试，
+message PlayerGetRoleResp {
+    RoleProto role = 1;
+}
+

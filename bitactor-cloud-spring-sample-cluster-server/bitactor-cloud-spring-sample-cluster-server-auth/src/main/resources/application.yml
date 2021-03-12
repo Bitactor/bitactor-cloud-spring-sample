@@ -1,0 +1,21 @@
+# Spring配置
+spring:
+  application:
+    name: "#{appInfoHandler.getAppInfo().getAppName()}"
+    project: "#{appInfoHandler.getAppInfo().getProject()}"
+  # bitactor框架配置
+  bitactor:
+    cluster:
+      # 注册中心配置 默认 nacos 支持 backup
+      registry:
+        host: 127.0.0.1
+        port: 8848
+      provider:
+        net-protocol: TCP
+      # RPC 该服务的消费服务配置
+      consumer:
+        subscribe: "*"
+        logger-delay: true
+        router-adapter: com.bitactor.cloud.spring.sample.common.frame.CustomRouter
+
+

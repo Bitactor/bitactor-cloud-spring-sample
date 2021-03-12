@@ -1,0 +1,20 @@
+#bitactor:
+#  client:
+#    accounts[0].account: 100000101
+#    accounts[0].password: 123456
+#    accounts[1].account: 10000010
+#    accounts[1].password: 123456
+# Spring配置
+spring:
+  application:
+    name: "client"
+  # bitactor框架配置
+  bitactor:
+    client:
+      host: 192.168.0.51
+      port: 8899
+      count: 1
+      # TCP WS KCP
+      net-protocol: TCP
+      # ws-path: "/front"
+      open-ws-ssl: true

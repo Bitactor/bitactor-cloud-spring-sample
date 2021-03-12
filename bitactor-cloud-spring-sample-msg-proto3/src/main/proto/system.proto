@@ -1,0 +1,10 @@
+syntax = "proto3";
+option java_package = "com.bitactor.cloud.spring.sample.msg.proto.system";
+option java_multiple_files = true;
+import public "common.proto";
+
+// 连接断开通知，
+message DisconnectNotify {
+    DisconnectEnum type = 1;   //断开类型
+    string msg = 2; //消息描述
+}

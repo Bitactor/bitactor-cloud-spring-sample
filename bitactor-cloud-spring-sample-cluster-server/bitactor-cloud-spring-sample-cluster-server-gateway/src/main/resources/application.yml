@@ -1,0 +1,34 @@
+# Spring配置
+spring:
+  application:
+    name: "#{appInfoHandler.getAppInfo().getAppName()}"
+    project: "#{appInfoHandler.getAppInfo().getProject()}"
+  # bitactor框架配置
+  bitactor:
+    # 网关服务（gateway）对外暴露配置
+    connector:
+      # 对外暴露的ip&域名
+      host: 192.168.0.51
+      # 对外暴露的端口,配置该值后将开启网关服
+      port: 8899
+      hand-shake-data-bound-classes: com.bitactor.cloud.spring.sample.cluster.server.gateway.frame.CustomHandShakeDataBound
+      ip-limit: 0
+      # TCP WS KCP
+      net-protocol: TCP
+      # ws-path: "/front"
+      open-ws-ssl: true
+    # 后端服务,提供RPC能力和connector分发的controller消息处理
+    cluster:
+      # 注册中心配置 默认 nacos 支持 backup
+      registry:
+        host: 127.0.0.1
+        port: 8848
+      provider:
+        net-protocol: TCP
+      # RPC 该服务的消费服务配置
+      consumer:
+        subscribe: "*"
+        logger-delay: true
+        router-adapter: com.bitactor.cloud.spring.sample.common.frame.CustomRouter
+
+
