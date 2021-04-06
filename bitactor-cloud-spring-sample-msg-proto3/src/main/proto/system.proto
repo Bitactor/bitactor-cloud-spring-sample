@@ -8,3 +8,7 @@ message DisconnectNotify {
     DisconnectEnum type = 1;   //断开类型
     string msg = 2; //消息描述
 }
+// 时间通知，
+message TimeStrNotify {
+    string time = 2; //时间字符串
+}

@@ -59,6 +59,6 @@ public class PlayerReqService {
     }
 
     public CommonResp getRole(PlayerClient player) {
-        return player.sendProtoSync(PlayerGetRoleReq.newBuilder().build());
+        return player.sendProtoSync(1122,PlayerGetRoleReq.newBuilder().build());
     }
 }

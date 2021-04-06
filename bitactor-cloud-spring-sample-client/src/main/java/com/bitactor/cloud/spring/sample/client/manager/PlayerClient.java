@@ -18,6 +18,8 @@
 package com.bitactor.cloud.spring.sample.client.manager;
 
 
+import com.bitactor.cloud.spring.sample.client.notice.DisconnectNoticeListener;
+import com.bitactor.cloud.spring.sample.client.notice.TimeStrNoticeListener;
 import com.bitactor.cloud.spring.sample.client.service.PlayerReqService;
 import com.bitactor.cloud.spring.sample.msg.json.common.CommonJsonResp;
 import com.bitactor.cloud.spring.sample.msg.proto.auth.LoginAuthResp;
@@ -26,10 +28,8 @@ import com.bitactor.cloud.spring.sample.msg.proto.common.CodeEnum;
 import com.bitactor.cloud.spring.sample.msg.proto.common.CommonResp;
 import com.bitactor.cloud.spring.sample.msg.proto.common.RoleProto;
 import com.bitactor.cloud.spring.sample.msg.proto.player.PlayerEnterWorldResp;
-import com.bitactor.cloud.spring.sample.msg.proto.system.DisconnectNotify;
 import com.bitactor.framework.cloud.spring.boot.client.extension.AbstractClientEntity;
 import com.bitactor.framework.cloud.spring.boot.client.extension.RequestStage;
-import com.bitactor.framework.cloud.spring.model.constants.ProtocolType;
 import com.bitactor.framework.core.net.api.Channel;
 import com.bitactor.framework.core.net.api.Client;
 import com.google.protobuf.GeneratedMessageV3;
@@ -69,6 +69,12 @@ public class PlayerClient extends AbstractClientEntity<String> {
     public void init() {
         initLogin();
         initEnterWorld();
+        initNotice();
+    }
+
+    private void initNotice() {
+        addNoticeMapping(new DisconnectNoticeListener());
+        addNoticeMapping(new TimeStrNoticeListener());
     }
 
     @Override
@@ -120,6 +126,17 @@ public class PlayerClient extends AbstractClientEntity<String> {
     }
 
     /**
+     * 同步请求
+     *
+     * @param reqId
+     * @param req
+     * @return
+     */
+    public CommonResp sendProtoSync(int reqId, GeneratedMessageV3 req) {
+        return sendSync(reqId, req, CommonResp.class, getRequestStage(req.getClass().getSimpleName()));
+    }
+
+    /**
      * 异步请求
      *
      * @param req
@@ -165,20 +182,6 @@ public class PlayerClient extends AbstractClientEntity<String> {
                 exception[0] = true;
             }
         };
-    }
-
-    /**
-     * 接受到消息
-     *
-     * @param message
-     */
-    @Override
-    public void onReceivedNotice(ProtocolType protocolType, Object message) {
-        if (message instanceof DisconnectNotify) {
-            log.info("接受到连接断开消息:{},信息:{}", ((DisconnectNotify) message).getType(), ((DisconnectNotify) message).getMsg());
-        } else {
-            onUnknown(message);
-        }
     }
 
     @Override

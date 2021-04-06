@@ -60,7 +60,7 @@ public class WorldPlayerController extends BaseController {
         return success(playerService.enterWorld(req, session));
     }
 
-    @BitactorRequestMapping
+    @BitactorRequestMapping()
     public CommonResp getRoleProto(@ProtocolBody PlayerGetRoleReq req, NetPlayer player) {
         RoleProto.Builder roleProto = ProtoBeanUtils.toProtoBean(RoleProto.newBuilder(), player.getRole());
         return success(PlayerGetRoleResp.newBuilder().setRole(roleProto).build());

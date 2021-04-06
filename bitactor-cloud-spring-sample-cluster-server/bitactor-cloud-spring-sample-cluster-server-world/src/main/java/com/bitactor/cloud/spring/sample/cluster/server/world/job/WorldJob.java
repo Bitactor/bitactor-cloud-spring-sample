@@ -18,13 +18,16 @@
 package com.bitactor.cloud.spring.sample.cluster.server.world.job;
 
 import com.bitactor.cloud.spring.sample.common.player.bean.NetPlayer;
+import com.bitactor.cloud.spring.sample.msg.proto.system.TimeStrNotify;
 import com.bitactor.framework.cloud.spring.controller.bean.conn.ConnectManager;
+import com.bitactor.framework.cloud.spring.rpc.MsgSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * @author WXH
@@ -54,5 +57,16 @@ public class WorldJob {
     @Scheduled(fixedDelay = 120000)
     private void onlineSize() {
         log.info("World online number {}", playerManager.onlineSize());
+    }
+
+    /**
+     * 5秒执行一次时间推送
+     */
+    @Scheduled(fixedDelay = 50000)
+    private void timeNotice() {
+        Collection<NetPlayer> players = playerManager.all();
+        for (NetPlayer player : players) {
+            MsgSender.sendMsgProtoBuf(player.getSessionId(), TimeStrNotify.newBuilder().setTime(new Date().toString()).build());
+        }
     }
 }

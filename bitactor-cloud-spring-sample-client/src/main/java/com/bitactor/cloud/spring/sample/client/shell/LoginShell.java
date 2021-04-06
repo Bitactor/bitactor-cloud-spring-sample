@@ -36,7 +36,7 @@ public class LoginShell {
     @Autowired
     private PlayerClientManager playerClientManager;
 
-    @ShellMethod("获取登录玩家，格式: account")
+    @ShellMethod("登录，格式: account")
     public String login(String account, String pwd) {
         if (Objects.nonNull(playerClientManager.getByAccount(account))) {
             return "玩家已经登录";
