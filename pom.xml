@@ -55,7 +55,7 @@
 
         <!-- Common libs -->
         <spring_boot_version>2.2.0.RELEASE</spring_boot_version>
-        <bitactor_cloud_version>1.0.0-SNAPSHOT</bitactor_cloud_version>
+        <bitactor_cloud_version>1.0.3</bitactor_cloud_version>
         <lombok_version>1.16.20</lombok_version>
         <protobuff_util_version>3.8.0</protobuff_util_version>
         <redisson_version>3.12.4</redisson_version>
