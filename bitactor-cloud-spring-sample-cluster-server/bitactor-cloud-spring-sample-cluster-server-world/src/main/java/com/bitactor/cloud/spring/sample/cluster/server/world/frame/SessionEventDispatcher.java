@@ -17,14 +17,15 @@
 
 package com.bitactor.cloud.spring.sample.cluster.server.world.frame;
 
-import com.bitactor.framework.cloud.spring.controller.concurrent.ThreadAdapter;
+import com.bitactor.framework.cloud.spring.controller.concurrent.SessionMsgDispatcher;
 import com.bitactor.framework.cloud.spring.controller.session.ClientNetSession;
+import com.bitactor.framework.core.constant.NetConstants;
+import com.bitactor.framework.core.eventloop.BitactorEventLoopGroup;
 import com.bitactor.framework.core.threadpool.AtomicOrderedExecutorQueue;
 import com.bitactor.framework.core.threadpool.NamedThreadFactory;
-import com.bitactor.framework.core.threadpool.OrderedExecutor;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,13 +33,27 @@ import java.util.concurrent.Executors;
  * @author WXH
  */
 @Component
-public class SessionThreadAdapter implements ThreadAdapter {
-    ExecutorService service = Executors.newFixedThreadPool(5, new NamedThreadFactory("session"));
-    private ConcurrentHashMap<Long, OrderedExecutor> orderedThreadMap = new ConcurrentHashMap<>();
+public class SessionEventDispatcher implements SessionMsgDispatcher {
+
+    private final AtomicOrderedExecutorQueue<Runnable> noUserDispatcher;
+
+    private final BitactorEventLoopGroup eventLoopGroup;
+
+    public SessionEventDispatcher() {
+        ExecutorService service = Executors.newFixedThreadPool(1, new NamedThreadFactory("session-dispatcher"));
+        noUserDispatcher = new AtomicOrderedExecutorQueue<Runnable>(service);
+        eventLoopGroup = new BitactorEventLoopGroup(NetConstants.DEFAULT_IO_THREADS, new NamedThreadFactory(this.getClass().getSimpleName()));
+    }
 
     @Override
     public void doIt(ClientNetSession session, Runnable runnable) {
-        OrderedExecutor queue = orderedThreadMap.computeIfAbsent(session.getUid(), (k) -> new AtomicOrderedExecutorQueue(service));
-        queue.add(runnable);
+        if (Objects.isNull(session.getUid())) {
+            noUserDispatcher.add(runnable);
+        } else {
+            eventLoopGroup.next((loops) -> {
+                long uid = session.typeUid();
+                return loops[(int) (uid % loops.length)];
+            }).execute(runnable);
+        }
     }
 }

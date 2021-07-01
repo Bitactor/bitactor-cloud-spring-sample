@@ -23,12 +23,14 @@ import com.bitactor.cloud.spring.sample.common.service.gateway.provider.GatewayS
 import com.bitactor.cloud.spring.sample.msg.proto.common.DisconnectEnum;
 import com.bitactor.cloud.spring.sample.msg.proto.system.DisconnectNotify;
 import com.bitactor.framework.cloud.spring.controller.extension.ConnectorChannelHandler;
+import com.bitactor.framework.cloud.spring.controller.sender.MsgSender;
 import com.bitactor.framework.cloud.spring.controller.session.SessionId;
-import com.bitactor.framework.cloud.spring.rpc.MsgSender;
 import com.bitactor.framework.cloud.spring.rpc.annotation.ServiceRPC;
 import com.bitactor.framework.core.net.api.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.Resource;
 
 /**
  * @author WXH
@@ -39,7 +41,7 @@ public class GatewayServiceImpl implements GatewayService {
     @Autowired
     private ConnectService connectService;
 
-    @Autowired
+    @Resource
     private ConnectorChannelHandler connectorChannelHandler;
     @Override
     public void forceDisconnect(SessionId sessionId, LogoutType logoutType) {
@@ -49,7 +51,7 @@ public class GatewayServiceImpl implements GatewayService {
         }
         connectService.disConnectOpt(channel, logoutType);
         //  发送关闭连接原因
-        MsgSender.sendMsgProtoBuf(sessionId, DisconnectNotify.newBuilder().setType(DisconnectEnum.OTHER_LOGIN).build());
+        MsgSender.sendMsg(sessionId, DisconnectNotify.newBuilder().setType(DisconnectEnum.OTHER_LOGIN).build());
         // 关闭连接
         channel.close();
     }

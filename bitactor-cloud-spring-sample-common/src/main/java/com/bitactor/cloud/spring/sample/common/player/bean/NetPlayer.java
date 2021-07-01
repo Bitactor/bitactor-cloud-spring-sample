@@ -23,12 +23,13 @@ import com.bitactor.cloud.spring.sample.common.consts.GameConstants;
 import com.bitactor.cloud.spring.sample.common.consts.PlayerCacheConstants;
 import com.bitactor.cloud.spring.sample.common.dao.RoleDao;
 import com.bitactor.cloud.spring.sample.common.enums.LogoutType;
+import com.bitactor.cloud.spring.sample.common.player.OnlinePlayerManager;
 import com.bitactor.framework.cloud.spring.controller.bean.conn.ConnectManager;
 import com.bitactor.framework.cloud.spring.controller.bean.online.OnlineManager;
+import com.bitactor.framework.cloud.spring.controller.sender.MsgSender;
 import com.bitactor.framework.cloud.spring.controller.session.ClientNetSession;
 import com.bitactor.framework.cloud.spring.controller.session.SessionId;
 import com.bitactor.framework.cloud.spring.core.utils.SpringUtils;
-import com.bitactor.framework.cloud.spring.rpc.MsgSender;
 import com.google.protobuf.GeneratedMessageV3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +99,7 @@ public class NetPlayer extends DBPlayer {
      */
     public void doUpdateToClientEvent() {
         for (GeneratedMessageV3 msg : msgs) {
-            MsgSender.sendMsgProtoBuf(getSessionId(), msg);
+            MsgSender.sendMsg(getSessionId(), msg);
             logger.debug("Push the uid {} player to update the data", getUid());
         }
         msgs.clear();
@@ -122,7 +123,7 @@ public class NetPlayer extends DBPlayer {
         long last = getCache(PlayerCacheConstants.LAST_UPDATE_ONLINE_TIME, 0L);
         long now = System.currentTimeMillis();
         if (now - last > GameConstants.UPDATE_ONLINE_INTERVAL_MS) {
-            SpringUtils.getBean(OnlineManager.class).update(getSession().build());
+            SpringUtils.getBean(OnlinePlayerManager.class).update(getSession().build());
             putCache(PlayerCacheConstants.LAST_UPDATE_ONLINE_TIME, now);
         }
     }

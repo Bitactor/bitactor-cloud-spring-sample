@@ -26,17 +26,19 @@ import com.bitactor.cloud.spring.sample.common.enums.GroupType;
 import com.bitactor.cloud.spring.sample.common.enums.LogoutType;
 import com.bitactor.cloud.spring.sample.common.exception.Assert;
 import com.bitactor.cloud.spring.sample.common.platform.AuthInfo;
+import com.bitactor.cloud.spring.sample.common.player.OnlinePlayerManager;
 import com.bitactor.cloud.spring.sample.common.service.gateway.provider.GatewayService;
 import com.bitactor.cloud.spring.sample.msg.proto.auth.LoginAuthReq;
 import com.bitactor.cloud.spring.sample.msg.proto.auth.LoginAuthResp;
 import com.bitactor.cloud.spring.sample.msg.proto.common.CodeEnum;
 import com.bitactor.framework.cloud.spring.controller.bean.online.OnlineInfo;
-import com.bitactor.framework.cloud.spring.controller.bean.online.OnlineManager;
 import com.bitactor.framework.cloud.spring.controller.session.ClientNetSession;
 import com.bitactor.framework.cloud.spring.rpc.annotation.RefRPC;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @author WXH
@@ -49,8 +51,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private RoleDao roleDao;
-    @Autowired
-    private OnlineManager onlineManager;
+    @Resource
+    private OnlinePlayerManager onlineManager;
 
     @RefRPC(GroupType.GATEWAY)
     private GatewayService gatewayService;
@@ -60,13 +62,13 @@ public class AuthServiceImpl implements AuthService {
         AuthInfo authResult = platformComponent.auth(request.getPlatform(), request.getAuthType(), request.getParamsMap());
         Assert.isNull(authResult, CodeEnum.FAILED);
         // 设置 授权信息
-        session.setUserId(authResult.getUserId());
         session.addParam(GameConstants.SESSION_AUTH_KEY, authResult);
-        forceDisconnectByRepeated(session, authResult);
+        session.setUserId(authResult.getUserId());
         Role role = roleDao.findByUserId(authResult.getUserId());
         if (role != null) {
             // 绑定session uid
             session.setUid(role.getUid());
+            forceDisconnectByRepeated(session, authResult);
         }
         return LoginAuthResp.newBuilder().setNeedCreateRole(role == null).build();
 
@@ -79,8 +81,8 @@ public class AuthServiceImpl implements AuthService {
      * @param authResult
      */
     private void forceDisconnectByRepeated(ClientNetSession session, AuthInfo authResult) {
-        OnlineInfo onlineInfo = session.build();
-        OnlineInfo old = onlineManager.add(onlineInfo);
+        OnlineInfo<String> onlineInfo = session.build();
+        OnlineInfo<String> old = onlineManager.add(onlineInfo);
         if (old != null && !old.getSessionId().equals(onlineInfo.getSessionId())) {
             // 强制离线前面登录的
             gatewayService.forceDisconnect(old.getSessionId(), LogoutType.REPEATED_LOGIN);

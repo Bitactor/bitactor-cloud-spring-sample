@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * @author WXH
  */
 
-public abstract class DBPlayer extends AbstractConnect {
+public abstract class DBPlayer extends AbstractConnect<Long> {
     private static final Logger logger = LoggerFactory.getLogger(DBPlayer.class);
 
     private final Role role;
@@ -42,7 +42,7 @@ public abstract class DBPlayer extends AbstractConnect {
     }
 
     @Override
-    public long getUid() {
+    public Long getUid() {
         return this.role.getUid();
     }
 

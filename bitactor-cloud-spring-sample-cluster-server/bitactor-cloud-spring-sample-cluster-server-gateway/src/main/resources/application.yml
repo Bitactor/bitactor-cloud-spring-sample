@@ -7,8 +7,6 @@ spring:
   bitactor:
     # 网关服务（gateway）对外暴露配置
     connector:
-      # 对外暴露的ip&域名
-      host: 192.168.0.51
       # 对外暴露的端口,配置该值后将开启网关服
       port: 8899
       hand-shake-data-bound-classes: com.bitactor.cloud.spring.sample.cluster.server.gateway.frame.CustomHandShakeDataBound
@@ -16,7 +14,7 @@ spring:
       # TCP WS KCP
       net-protocol: TCP
       # ws-path: "/front"
-      open-ws-ssl: true
+      big-endian: true
     # 后端服务,提供RPC能力和connector分发的controller消息处理
     cluster:
       # 注册中心配置 默认 nacos 支持 backup

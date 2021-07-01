@@ -11,10 +11,11 @@ spring:
   # bitactor框架配置
   bitactor:
     client:
-      host: 192.168.0.51
+      host: 127.0.0.1
       port: 8899
       count: 1
       # TCP WS KCP
       net-protocol: TCP
       # ws-path: "/front"
       open-ws-ssl: true
+      big-endian: true

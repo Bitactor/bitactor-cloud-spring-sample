@@ -17,15 +17,15 @@
 
 package com.bitactor.cloud.spring.sample.cluster.server.world.job;
 
+import com.bitactor.cloud.spring.sample.common.player.PlayerManager;
 import com.bitactor.cloud.spring.sample.common.player.bean.NetPlayer;
 import com.bitactor.cloud.spring.sample.msg.proto.system.TimeStrNotify;
-import com.bitactor.framework.cloud.spring.controller.bean.conn.ConnectManager;
-import com.bitactor.framework.cloud.spring.rpc.MsgSender;
+import com.bitactor.framework.cloud.spring.controller.sender.MsgSender;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Date;
 
@@ -35,8 +35,8 @@ import java.util.Date;
 @Slf4j
 @Component
 public class WorldJob {
-    @Autowired
-    private ConnectManager<NetPlayer> playerManager;
+    @Resource
+    private PlayerManager playerManager;
 
     /**
      * 上一次执行完毕时间点后10秒再次执行
@@ -66,7 +66,7 @@ public class WorldJob {
     private void timeNotice() {
         Collection<NetPlayer> players = playerManager.all();
         for (NetPlayer player : players) {
-            MsgSender.sendMsgProtoBuf(player.getSessionId(), TimeStrNotify.newBuilder().setTime(new Date().toString()).build());
+            MsgSender.sendMsg(player.getSessionId(), TimeStrNotify.newBuilder().setTime(new Date().toString()).build());
         }
     }
 }

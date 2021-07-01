@@ -70,7 +70,6 @@ public class GetRoleDataShell {
     }
 
     private String sync(int times, PlayerClient playerClient) {
-        AtomicInteger count = new AtomicInteger();
         long start = System.currentTimeMillis();
         for (int i = 0; i < times; i++) {
             try {
@@ -78,11 +77,9 @@ public class GetRoleDataShell {
                 printResult(commonResp);
             } catch (InvalidProtocolBufferException e) {
                 e.printStackTrace();
-            } finally {
-                count.incrementAndGet();
             }
         }
-        return "use: " + (System.currentTimeMillis() - start) + " ms count: " + count.get();
+        return "use: " + (System.currentTimeMillis() - start) + " ms count: " + times;
     }
 
     private String async(int times, PlayerClient playerClient) throws ExecutionException, InterruptedException {

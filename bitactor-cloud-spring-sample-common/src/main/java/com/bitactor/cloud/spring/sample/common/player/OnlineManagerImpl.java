@@ -23,7 +23,6 @@ import com.bitactor.cloud.spring.sample.common.consts.redis.PlayerRedisKey;
 import com.bitactor.cloud.spring.sample.common.redis.RedisCache;
 import com.bitactor.cloud.spring.sample.common.utils.RedisKeyUtil;
 import com.bitactor.framework.cloud.spring.controller.bean.online.OnlineInfo;
-import com.bitactor.framework.cloud.spring.controller.bean.online.OnlineManager;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -37,7 +36,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Service
-public class OnlineManagerImpl implements OnlineManager {
+public class OnlineManagerImpl implements OnlinePlayerManager {
 
     // 在线缓存时间 需要通过响应的 触发去更新这个时间，否则可能出现丢失在线缓存
     private static final int ONLINE_TIMEOUT = 2;
@@ -58,8 +57,8 @@ public class OnlineManagerImpl implements OnlineManager {
     }
 
     @Override
-    public OnlineInfo add(OnlineInfo onlineInfo) {
-        OnlineInfo oldVal = null;
+    public OnlineInfo<String> add(OnlineInfo<String> onlineInfo) {
+        OnlineInfo<String> oldVal = null;
         String lockKey = getRedisLockKey(onlineInfo.getId());
         String key = getRedisKey(onlineInfo.getId());
         RLock lock = redissonClient.getLock(lockKey);
@@ -77,8 +76,8 @@ public class OnlineManagerImpl implements OnlineManager {
     }
 
     @Override
-    public OnlineInfo update(OnlineInfo onlineInfo) {
-        OnlineInfo oldVal = null;
+    public OnlineInfo<String> update(OnlineInfo<String> onlineInfo) {
+        OnlineInfo<String> oldVal = null;
         String lockKey = getRedisLockKey(onlineInfo.getId());
         String key = getRedisKey(onlineInfo.getId());
         RLock lock = redissonClient.getLock(lockKey);
@@ -100,14 +99,15 @@ public class OnlineManagerImpl implements OnlineManager {
         }
     }
 
+
     @Override
-    public OnlineInfo get(String id) {
+    public OnlineInfo<String> get(String id) {
         return redisCache.getCacheObject(getRedisKey(id));
     }
 
     @Override
-    public OnlineInfo remove(OnlineInfo onlineInfo) {
-        OnlineInfo oldVal = null;
+    public OnlineInfo<String> remove(OnlineInfo<String> onlineInfo) {
+        OnlineInfo<String> oldVal = null;
         String lockKey = getRedisLockKey(onlineInfo.getId());
         String key = getRedisKey(onlineInfo.getId());
         RLock lock = redissonClient.getLock(lockKey);

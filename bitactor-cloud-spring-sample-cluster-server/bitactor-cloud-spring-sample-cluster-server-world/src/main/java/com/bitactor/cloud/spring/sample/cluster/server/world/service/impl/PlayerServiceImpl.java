@@ -26,6 +26,7 @@ import com.bitactor.cloud.spring.sample.common.enums.GroupType;
 import com.bitactor.cloud.spring.sample.common.exception.Assert;
 import com.bitactor.cloud.spring.sample.common.exception.GameCodeException;
 import com.bitactor.cloud.spring.sample.common.platform.AuthInfo;
+import com.bitactor.cloud.spring.sample.common.player.PlayerManager;
 import com.bitactor.cloud.spring.sample.common.player.bean.NetPlayer;
 import com.bitactor.cloud.spring.sample.common.utils.ProtoBeanUtils;
 import com.bitactor.cloud.spring.sample.msg.proto.common.CodeEnum;
@@ -33,12 +34,13 @@ import com.bitactor.cloud.spring.sample.msg.proto.common.RoleProto;
 import com.bitactor.cloud.spring.sample.msg.proto.player.PlayerCreateRoleReq;
 import com.bitactor.cloud.spring.sample.msg.proto.player.PlayerEnterWorldReq;
 import com.bitactor.cloud.spring.sample.msg.proto.player.PlayerEnterWorldResp;
-import com.bitactor.framework.cloud.spring.controller.bean.conn.ConnectManager;
 import com.bitactor.framework.cloud.spring.controller.session.ClientNetSession;
 import com.bitactor.framework.cloud.spring.core.BitactorApplicationProperties;
 import com.bitactor.framework.cloud.spring.core.utils.SpringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @author WXH
@@ -49,8 +51,8 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired
     private RoleDao roleDao;
 
-    @Autowired
-    private ConnectManager<NetPlayer> playerManager;
+    @Resource
+    private PlayerManager playerManager;
 
     @Override
     //@Transactional
@@ -73,7 +75,7 @@ public class PlayerServiceImpl implements PlayerService {
         BitactorApplicationProperties properties = SpringUtils.getBean(BitactorApplicationProperties.class);
         session.addParam(GroupType.WORLD, properties.getSID());
         // 获取玩家属性信息
-        Role role = roleDao.findByUid(session.getUid());
+        Role role = roleDao.findByUid(session.typeUid());
         Assert.isNull(role);
         NetPlayer player = new NetPlayer(role, session);
         playerManager.add(player);

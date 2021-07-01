@@ -18,7 +18,6 @@
 package com.bitactor.cloud.spring.sample.common.player;
 
 import com.bitactor.cloud.spring.sample.common.player.bean.NetPlayer;
-import com.bitactor.framework.cloud.spring.controller.bean.conn.ConnectManager;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -30,14 +29,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author WXH
  */
 @Service
-public class PlayerManagerImpl implements ConnectManager<NetPlayer> {
+public class PlayerManagerImpl implements PlayerManager {
 
     private final static ConcurrentHashMap<Long, NetPlayer> onlinePlayer = new ConcurrentHashMap<Long, NetPlayer>();
 
     @Override
-    public NetPlayer get(long uid) {
+    public NetPlayer get(Long uid) {
         return onlinePlayer.get(uid);
     }
+
 
     @Override
     public boolean add(NetPlayer player) {
@@ -46,7 +46,7 @@ public class PlayerManagerImpl implements ConnectManager<NetPlayer> {
     }
 
     @Override
-    public NetPlayer remove(long uid) {
+    public NetPlayer remove(Long uid) {
         return onlinePlayer.remove(uid);
     }
 

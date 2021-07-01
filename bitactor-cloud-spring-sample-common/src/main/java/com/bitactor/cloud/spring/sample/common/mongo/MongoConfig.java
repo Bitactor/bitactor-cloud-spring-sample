@@ -17,10 +17,7 @@
 
 package com.bitactor.cloud.spring.sample.common.mongo;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.data.mongodb.MongoTransactionManager;
 
 /**
  * mongoDb 事务支持配置
@@ -28,8 +25,8 @@ import org.springframework.data.mongodb.MongoTransactionManager;
  */
 @Configuration
 public class MongoConfig {
-    @Bean
-    MongoTransactionManager transactionManager(MongoDbFactory factory){
-        return new MongoTransactionManager(factory);
-    }
+    //@Bean
+    //MongoTransactionManager transactionManager(MongoDbFactory factory){
+    //    return new MongoTransactionManager(factory);
+    //}
 }

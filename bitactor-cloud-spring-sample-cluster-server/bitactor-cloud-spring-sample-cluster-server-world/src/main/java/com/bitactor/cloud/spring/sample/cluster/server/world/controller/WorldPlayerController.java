@@ -36,15 +36,18 @@ import com.bitactor.cloud.spring.sample.msg.proto.player.PlayerGetRoleResp;
 import com.bitactor.framework.cloud.spring.controller.annotation.BitactorController;
 import com.bitactor.framework.cloud.spring.controller.annotation.BitactorRequestMapping;
 import com.bitactor.framework.cloud.spring.controller.annotation.ProtocolBody;
+import com.bitactor.framework.cloud.spring.controller.annotation.constants.AsyncEnum;
 import com.bitactor.framework.cloud.spring.controller.session.ClientNetSession;
 import com.bitactor.framework.cloud.spring.model.constants.ProtocolType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author WXH
  */
-@BitactorController(connector = GroupType.GATEWAY, async = true)
+@Slf4j
+@BitactorController(connector = GroupType.GATEWAY, async = AsyncEnum.ASYNC)
 public class WorldPlayerController extends BaseController {
 
     @Autowired
@@ -63,6 +66,7 @@ public class WorldPlayerController extends BaseController {
     @BitactorRequestMapping()
     public CommonResp getRoleProto(@ProtocolBody PlayerGetRoleReq req, NetPlayer player) {
         RoleProto.Builder roleProto = ProtoBeanUtils.toProtoBean(RoleProto.newBuilder(), player.getRole());
+        log.info("do get role method, uid: " + player.getUid());
         return success(PlayerGetRoleResp.newBuilder().setRole(roleProto).build());
     }
 

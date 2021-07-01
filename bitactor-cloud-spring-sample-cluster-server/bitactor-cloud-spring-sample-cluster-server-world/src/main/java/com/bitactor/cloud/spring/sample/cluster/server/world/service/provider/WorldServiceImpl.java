@@ -19,13 +19,14 @@ package com.bitactor.cloud.spring.sample.cluster.server.world.service.provider;
 
 
 import com.bitactor.cloud.spring.sample.common.enums.LogoutType;
+import com.bitactor.cloud.spring.sample.common.player.PlayerManager;
 import com.bitactor.cloud.spring.sample.common.player.bean.NetPlayer;
 import com.bitactor.cloud.spring.sample.common.service.world.provider.WorldService;
-import com.bitactor.framework.cloud.spring.controller.bean.conn.ConnectManager;
 import com.bitactor.framework.cloud.spring.controller.session.ClientNetSession;
 import com.bitactor.framework.cloud.spring.rpc.annotation.ServiceRPC;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.Resource;
 
 /**
  * @author WXH
@@ -34,15 +35,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 @ServiceRPC
 public class WorldServiceImpl implements WorldService {
 
-    @Autowired
-    private ConnectManager<NetPlayer> playerManager;
+    @Resource
+    private PlayerManager playerManager;
 
 
     @Override
     public void onChannelClosedEvent(ClientNetSession session, LogoutType logoutType) {
         boolean isFindPlayer = false;
         try {
-            NetPlayer player = playerManager.get(session.getUid());
+            NetPlayer player = playerManager.get(session.typeUid());
             player.logout(logoutType);
             isFindPlayer = true;
         } catch (Exception e) {
