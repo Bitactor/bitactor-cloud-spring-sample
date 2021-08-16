@@ -27,6 +27,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>bitactor-cloud-spring-sample-msg-json</artifactId>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -39,4 +39,5 @@
             <artifactId>bitactor-cloud-cluster-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
+
 </project>

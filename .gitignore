@@ -31,3 +31,5 @@ Thumbs.db
 
 # flatten ignore
 .flattened-pom.xml
+# other
+*@AppId

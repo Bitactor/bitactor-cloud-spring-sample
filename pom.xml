@@ -51,7 +51,7 @@
         <!-- Maven plugins -->
         <maven_flatten_version>1.1.0</maven_flatten_version>
         <!--工程版本-->
-        <revision>1.0.0</revision>
+        <revision>1.0.4</revision>
 
         <!-- Common libs -->
         <spring_boot_version>2.2.0.RELEASE</spring_boot_version>
