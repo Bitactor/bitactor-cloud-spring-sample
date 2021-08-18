@@ -3,7 +3,6 @@
 * JDK 1.8+
 * Maven3
 * Springboot 2.5.2+
-* Nacos 1.2.1+ 
 
 ## 安装服务
 * Nocos 2.0.0+
