@@ -30,7 +30,6 @@ import com.bitactor.cloud.spring.sample.msg.proto.common.RoleProto;
 import com.bitactor.cloud.spring.sample.msg.proto.player.PlayerEnterWorldResp;
 import com.bitactor.framework.cloud.spring.boot.client.extension.AbstractClientEntity;
 import com.bitactor.framework.cloud.spring.boot.client.extension.RequestStage;
-import com.bitactor.framework.cloud.spring.model.utils.MessageUtil;
 import com.bitactor.framework.core.net.api.Channel;
 import com.bitactor.framework.core.net.api.Client;
 import com.google.protobuf.GeneratedMessageV3;
@@ -123,7 +122,6 @@ public class PlayerClient extends AbstractClientEntity<String> {
      * @return
      */
     public CommonResp sendProtoSync(GeneratedMessageV3 req) {
-        System.out.println(" class: " + req.getClass().getSimpleName() + MessageUtil.getCommandId(req));
         return sendSync(req, CommonResp.class, getRequestStage(req.getClass().getSimpleName()));
     }
 
