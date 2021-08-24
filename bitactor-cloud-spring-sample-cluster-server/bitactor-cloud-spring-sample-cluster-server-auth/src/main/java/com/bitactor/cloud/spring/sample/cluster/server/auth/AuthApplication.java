@@ -24,8 +24,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * @author WXH
  */
+@SpringBootApplication(scanBasePackages = "com.bitactor")
 @EnableBitactorClusterConfiguration
-@SpringBootApplication(scanBasePackages = "com.bitactor.cloud")
 public class AuthApplication {
     public static void main(String[] args) throws Throwable {
         SpringApplication.run(AuthApplication.class, args);

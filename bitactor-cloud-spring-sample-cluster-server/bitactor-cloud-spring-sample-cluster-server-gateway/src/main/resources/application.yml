@@ -15,6 +15,10 @@ spring:
       net-protocol: TCP
       # ws-path: "/front"
       big-endian: true
+      msg-receive-event-loop-open: true
+      msg-event-loop-name-prefix: "bitactor"
+      msg-event-loop-threads: 5
+      heartbeat-period:
     # 后端服务,提供RPC能力和connector分发的controller消息处理
     cluster:
       # 注册中心配置 默认 nacos 支持 backup

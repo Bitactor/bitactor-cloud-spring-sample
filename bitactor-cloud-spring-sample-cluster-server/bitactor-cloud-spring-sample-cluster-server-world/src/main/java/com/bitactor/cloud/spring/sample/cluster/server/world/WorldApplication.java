@@ -26,8 +26,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author WXH
  */
 @EnableScheduling
+@SpringBootApplication(scanBasePackages = "com.bitactor")
 @EnableBitactorClusterConfiguration
-@SpringBootApplication(scanBasePackages = "com.bitactor.cloud")
 public class WorldApplication {
     public static void main(String[] args) throws Throwable {
         SpringApplication.run(WorldApplication.class, args);

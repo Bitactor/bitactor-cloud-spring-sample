@@ -18,6 +18,7 @@
 package com.bitactor.cloud.spring.sample.cluster.server.gateway;
 
 import com.bitactor.framework.cloud.spring.boot.cluster.annotation.EnableBitactorClusterConfiguration;
+import com.bitactor.framework.cloud.spring.boot.connector.annotation.EnableBitactorConnectorConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -26,8 +27,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author WXH
  */
 @EnableScheduling
+@SpringBootApplication(scanBasePackages = "com.bitactor")
 @EnableBitactorClusterConfiguration
-@SpringBootApplication(scanBasePackages = "com.bitactor.cloud")
+@EnableBitactorConnectorConfiguration
 public class GatewayApplication {
 
     public static void main(String[] args) throws Throwable {
